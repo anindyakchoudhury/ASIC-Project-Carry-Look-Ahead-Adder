@@ -1,0 +1,48 @@
+
+
+Working Directory = /home/vlsi37/cds_digital/lab3_synth/projecttrial/RTL_synthesis
+QoS Summary for alu
+========================================================================================
+Metric                  generic   
+========================================================================================
+Slack (ps):                7,004
+  R2R (ps):             no_value
+  I2R (ps):             no_value
+  R2O (ps):             no_value
+  I2O (ps):                7,004
+  CG  (ps):             no_value
+TNS (ps):                      0
+  R2R (ps):             no_value
+  I2R (ps):             no_value
+  R2O (ps):             no_value
+  I2O (ps):                    0
+  CG  (ps):             no_value
+Failing Paths:                 0
+Area:                        333
+Instances:                    96
+Utilization (%):            0.00
+Tot. Net Length (um):   no_value
+Avg. Net Length (um):   no_value
+Route Overflow H (%):   no_value
+Route Overflow V (%):   no_value
+Seq MBCI Coverage(%):       0.00
+Norm Cong Hotspot Area:
+  Max Cong(4stdcell):   no_value
+  Tot Cong(4stdcell):   no_value
+========================================================================================
+CPU  Runtime (h:m:s):   00:00:02
+Real Runtime (h:m:s):   00:00:13
+CPU  Elapsed (h:m:s):   00:00:07
+Real Elapsed (h:m:s):   00:00:14
+Memory (MB):              490.01
+========================================================================================
+
+========================================================================================
+Flow Settings:
+========================================================================================
+Total Runtime (h:m:s): 00:00:13
+Total Memory (MB):     490.01
+Executable Version:    16.13
+========================================================================================
+
+

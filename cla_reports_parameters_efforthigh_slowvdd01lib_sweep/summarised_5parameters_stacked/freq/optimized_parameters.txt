@@ -1,0 +1,4 @@
+Optimal Parameters:
+Frequency: 71.428571 MHz
+Total Power: 10634.110000 nW
+Total Area: 230.000000 units

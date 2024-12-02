@@ -1,0 +1,4 @@
+Optimal Parameters:
+Output Delay: 1.100000 ns
+Total Power: 12239.046000 nW
+Total Area: 230.000000 units

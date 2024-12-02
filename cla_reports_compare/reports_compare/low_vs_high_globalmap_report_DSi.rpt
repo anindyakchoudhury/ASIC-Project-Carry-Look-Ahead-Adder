@@ -1,0 +1,35 @@
+
+	QOR statistics summary
+	----------------------
+
+
+        Metric         global_map.low_effort global_map.high_effort  %diff 
+---------------------------------------------------------------------------
+WNS.func_clk           -1631.6               -84.0                  94.85  
+WNS.default            no_value              no_value               n/a    
+TNS.func_clk           1631                  84                     94.85  
+TNS.default            0                     0                      n/a    
+overall_WNS            -1631.6               -84.0                  94.85  
+overall_TNS            1631                  84                     94.85  
+Violating_paths        1                     1                      0.0    
+runtime                1.00                  1.00                   0.0    
+memory                 30.83                 -1.00                  103.24 
+Leakage_power          n/a                   n/a                    n/a    
+Net_power              n/a                   n/a                    n/a    
+Internal_power         n/a                   n/a                    n/a    
+Clock_gating_instances n/a                   n/a                    n/a    
+total_net_length       n/a                   n/a                    n/a    
+average_net_length     n/a                   n/a                    n/a    
+routing_congestion     n/a                   n/a                    n/a    
+utilization            0.0                   0.0                    n/a    
+Inverter_count         20                    5                      75.00  
+Buffer_count           11                    0                      n/a    
+timing_model_count     0                     0                      n/a    
+sequential_count       16                    16                     0.0    
+unresolved_count       0                     0                      n/a    
+logic_count            57                    84                     47.37  
+Total_area             291.85                257.87                 11.64  
+Cell_area              291.85                257.87                 11.64  
+Net_area               0.00                  0.00                   n/a    
+
+

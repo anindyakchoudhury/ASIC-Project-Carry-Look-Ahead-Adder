@@ -1,0 +1,33 @@
+
+	QOR statistics summary
+	----------------------
+
+
+        Metric         generic.low_effort generic.medium_effort %diff 
+----------------------------------------------------------------------
+WNS                    n/a                n/a                   n/a   
+TNS                    n/a                n/a                   n/a   
+overall_WNS            n/a                n/a                   n/a   
+overall_TNS            n/a                n/a                   n/a   
+Violating_paths        n/a                n/a                   n/a   
+runtime                22                 0.00                  n/a   
+memory                 482.39             0.00                  n/a   
+Leakage_power          n/a                n/a                   n/a   
+Net_power              n/a                n/a                   n/a   
+Internal_power         n/a                n/a                   n/a   
+Clock_gating_instances n/a                n/a                   n/a   
+total_net_length       n/a                n/a                   n/a   
+average_net_length     n/a                n/a                   n/a   
+routing_congestion     n/a                n/a                   n/a   
+utilization            n/a                n/a                   n/a   
+Inverter_count         0                  16                    n/a   
+Buffer_count           0                  0                     n/a   
+timing_model_count     0                  0                     n/a   
+sequential_count       16                 16                    0.0   
+unresolved_count       0                  0                     n/a   
+logic_count            80                 73                    8.75  
+Total_area             332.82             343.84                3.31  
+Cell_area              332.82             343.84                3.31  
+Net_area               0.00               0.00                  n/a   
+
+

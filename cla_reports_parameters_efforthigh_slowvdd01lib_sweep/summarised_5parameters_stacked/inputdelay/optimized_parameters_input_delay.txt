@@ -1,0 +1,4 @@
+Optimal Parameters:
+Input Delay: 0.100000 ns
+Total Power: 12776.308000 nW
+Total Area: 230.000000 units

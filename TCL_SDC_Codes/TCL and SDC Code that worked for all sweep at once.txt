@@ -1,0 +1,245 @@
+# Run Genus in Legacy UI if Genus is invoked with Common UI
+::legacy::set_attribute common_ui false /;
+
+# Check CPU information
+if {[file exists /proc/cpuinfo]} {
+    sh grep "model name" /proc/cpuinfo
+    sh grep "cpu MHz" /proc/cpuinfo
+}
+puts "Hostname : [info hostname]"
+
+############################################################################
+# Preset global variables and attributes
+############################################################################
+set DESIGN alu
+set SYN_EFF medium
+set MAP_EFF medium
+set OPT_EFF medium
+
+# Directory of PDK
+set pdk_dir /home/cad/VLSI2Lab/Digital/library/
+set_attribute init_lib_search_path $pdk_dir
+
+# Set synthesizing effort for each synthesis stage
+set_attribute syn_generic_effort $SYN_EFF
+set_attribute syn_map_effort $MAP_EFF
+set_attribute syn_opt_effort $OPT_EFF
+set_attribute library "slow_vdd1v0_basicCells.lib"
+
+set_dont_use [get_lib_cells CLK*]
+set_dont_use [get_lib_cells SDFF*]
+set_dont_use [get_lib_cells DLY*]
+set_dont_use [get_lib_cells HOLD*]
+
+############################################################################
+# Load Design
+############################################################################
+read_hdl "${DESIGN}.v"
+elaborate $DESIGN
+check_design -unresolved
+
+############################################################################
+# Define default timing constraints
+############################################################################
+set DEFAULT_CLOCK_PERIOD 10.0
+set DEFAULT_SETUP_TIME 0.5
+set DEFAULT_HOLD_TIME 0.2
+set DEFAULT_INPUT_DELAY 0.3
+set DEFAULT_OUTPUT_DELAY 0.4
+
+# Create reports directory if it doesn't exist
+if {![file exists reports]} {
+    file mkdir reports
+}
+
+############################################################################
+# Frequency Sweep
+############################################################################
+puts "\n=== Starting Clock Period Sweep ==="
+set clock_periods {5.0 6.0 7.0 8.0 9.0 10.0 11.0 12.0 13.0 14.0}
+
+# Create report files for frequency sweep
+set freq_power_report "reports/${DESIGN}_power_freq_sweep.rpt"
+set freq_area_report "reports/${DESIGN}_area_freq_sweep.rpt"
+file delete $freq_power_report
+file delete $freq_area_report
+
+foreach period $clock_periods {
+    puts "\nSynthesizing for clock period: ${period}ns (Frequency: [expr 1000.0/$period]MHz)"
+    
+    # Set timing constraints
+    create_clock -name func_clk -period $period [get_ports clk]
+    set_input_delay $DEFAULT_INPUT_DELAY -clock func_clk [all_inputs]
+    set_output_delay $DEFAULT_OUTPUT_DELAY -clock func_clk [all_outputs]
+    
+    # Synthesize design
+    synthesize -to_mapped
+    
+    # Generate reports
+    report power >> $freq_power_report
+    report area >> $freq_area_report
+    report timing -encounter >> "reports/${DESIGN}_freq_[expr 1000.0/$period]MHz.rpt"
+}
+
+############################################################################
+# Setup Time Sweep
+############################################################################
+puts "\n=== Starting Setup Time Sweep ==="
+set setup_times {0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0}
+
+# Create report files for setup time sweep
+set setup_power_report "reports/${DESIGN}_power_setup_sweep.rpt"
+set setup_area_report "reports/${DESIGN}_area_setup_sweep.rpt"
+file delete $setup_power_report
+file delete $setup_area_report
+
+foreach setup_time $setup_times {
+    puts "\nSynthesizing for setup time: ${setup_time}ns"
+    
+    # Set timing constraints
+    create_clock -name func_clk -period $DEFAULT_CLOCK_PERIOD [get_ports clk]
+    set_input_delay $setup_time -clock func_clk [all_inputs]
+    set_output_delay $DEFAULT_OUTPUT_DELAY -clock func_clk [all_outputs]
+    
+    # Synthesize design
+    synthesize -to_mapped
+    
+    # Generate reports
+    report power >> $setup_power_report
+    report area >> $setup_area_report
+    report timing -encounter >> "reports/${DESIGN}_setup_${setup_time}ns.rpt"
+}
+
+############################################################################
+# Hold Time Sweep
+############################################################################
+puts "\n=== Starting Hold Time Sweep ==="
+set hold_times {0.05 0.10 0.15 0.20 0.25 0.30 0.35 0.40 0.45 0.50}
+
+# Create report files for hold time sweep
+set hold_power_report "reports/${DESIGN}_power_hold_sweep.rpt"
+set hold_area_report "reports/${DESIGN}_area_hold_sweep.rpt"
+file delete $hold_power_report
+file delete $hold_area_report
+
+foreach hold_time $hold_times {
+    puts "\nSynthesizing for hold time: ${hold_time}ns"
+    
+    # Set timing constraints
+    create_clock -name func_clk -period $DEFAULT_CLOCK_PERIOD [get_ports clk]
+    set_input_delay $DEFAULT_INPUT_DELAY -clock func_clk [all_inputs]
+    set_output_delay $DEFAULT_OUTPUT_DELAY -clock func_clk [all_outputs]
+    set_min_delay $hold_time -from [all_inputs] -to [all_registers]
+    
+    # Synthesize design
+    synthesize -to_mapped
+    
+    # Generate reports
+    report power >> $hold_power_report
+    report area >> $hold_area_report
+    report timing -encounter >> "reports/${DESIGN}_hold_${hold_time}ns.rpt"
+}
+
+############################################################################
+# Input Delay Sweep
+############################################################################
+puts "\n=== Starting Input Delay Sweep ==="
+set input_delays {0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0}
+
+# Create report files for input delay sweep
+set input_power_report "reports/${DESIGN}_power_input_delay_sweep.rpt"
+set input_area_report "reports/${DESIGN}_area_input_delay_sweep.rpt"
+file delete $input_power_report
+file delete $input_area_report
+
+foreach delay $input_delays {
+    puts "\nSynthesizing for input delay: ${delay}ns"
+    
+    # Set timing constraints
+    create_clock -name func_clk -period $DEFAULT_CLOCK_PERIOD [get_ports clk]
+    set_input_delay $delay -clock func_clk [all_inputs]
+    set_output_delay $DEFAULT_OUTPUT_DELAY -clock func_clk [all_outputs]
+    
+    # Synthesize design
+    synthesize -to_mapped
+    
+    # Generate reports
+    report power >> $input_power_report
+    report area >> $input_area_report
+    report timing -encounter >> "reports/${DESIGN}_input_delay_${delay}ns.rpt"
+}
+
+############################################################################
+# Output Delay Sweep
+############################################################################
+puts "\n=== Starting Output Delay Sweep ==="
+set output_delays {0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0 1.1}
+
+# Create report files for output delay sweep
+set output_power_report "reports/${DESIGN}_power_output_delay_sweep.rpt"
+set output_area_report "reports/${DESIGN}_area_output_delay_sweep.rpt"
+file delete $output_power_report
+file delete $output_area_report
+
+foreach delay $output_delays {
+    puts "\nSynthesizing for output delay: ${delay}ns"
+    
+    # Set timing constraints
+    create_clock -name func_clk -period $DEFAULT_CLOCK_PERIOD [get_ports clk]
+    set_input_delay $DEFAULT_INPUT_DELAY -clock func_clk [all_inputs]
+    set_output_delay $delay -clock func_clk [all_outputs]
+    
+    # Synthesize design
+    synthesize -to_mapped
+    
+    # Generate reports
+    report power >> $output_power_report
+    report area >> $output_area_report
+    report timing -encounter >> "reports/${DESIGN}_output_delay_${delay}ns.rpt"
+}
+
+# Final timing report
+report timing -encounter >> reports/${DESIGN}_final_timing.rpt
+
+
+
+
+
+
+
+#SDC Code---------------------
+
+
+# Setting up time units
+set_units -time 1ns -capacitance pF
+
+# Define all ports
+set clock_port {clk}
+set reset_port {rst_n}
+set input_ports {a b cin}
+set output_ports {sum carry_out16}
+
+# Default timing constraints
+set clock_period 10.0
+create_clock -name func_clk -period $clock_period [get_ports $clock_port]
+
+# Basic constraints with default values
+set_input_delay 0.3 -clock func_clk $input_ports
+set_output_delay 0.4 -clock func_clk $output_ports
+
+# Reset path constraints
+set_multicycle_path -setup 3 -from [get_ports $reset_port]
+set_multicycle_path -hold 2 -from [get_ports $reset_port]
+
+
+
+
+
+
+
+
+
+
+
+
+

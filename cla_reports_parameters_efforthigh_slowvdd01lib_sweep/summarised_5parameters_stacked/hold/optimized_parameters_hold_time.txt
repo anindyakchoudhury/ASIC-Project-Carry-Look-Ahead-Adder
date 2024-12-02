@@ -1,0 +1,4 @@
+Optimal Parameters:
+Hold Time: 0.050000 ns
+Total Power: 13038.540000 nW
+Total Area: 230.000000 units

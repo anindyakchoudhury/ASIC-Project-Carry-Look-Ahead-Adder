@@ -1,0 +1,12 @@
+Metric	Low_Effort	Medium_Effort	High_Effort	Diff_Low_Med	Diff_Med_High	Diff_Low_High
+runtime	22	0	0	NaN	NaN	NaN
+memory	482.39	0	0	NaN	NaN	NaN
+Inverter_count	0	16	0	NaN	NaN	NaN
+Buffer_count	0	0	0	NaN	NaN	NaN
+timing_model_count	0	0	0	NaN	NaN	NaN
+sequential_count	16	16	16	0	0	0
+unresolved_count	0	0	0	NaN	NaN	NaN
+logic_count	80	73	87	8.75	19.18	8.75
+Total_area	332.82	343.84	385.44	3.31	12.1	15.81
+Cell_area	332.82	343.84	385.44	3.31	12.1	15.81
+Net_area	0	0	0	NaN	NaN	NaN

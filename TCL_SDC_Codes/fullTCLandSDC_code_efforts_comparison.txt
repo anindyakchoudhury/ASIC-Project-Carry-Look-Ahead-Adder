@@ -1,0 +1,210 @@
+# Run Genus in Legacy UI if Genus is invoked with Common UI
+::legacy::set_attribute common_ui false /
+if {[file exists /proc/cpuinfo]} {
+    sh grep "model name" /proc/cpuinfo
+    sh grep "cpu MHz" /proc/cpuinfo
+}
+puts "Hostname : [info hostname]"
+
+##############################################################################
+### Preset global variables and attributes
+##############################################################################
+set DESIGN alu
+set SYN_EFF medium
+set MAP_EFF medium
+set OPT_EFF medium
+# Directory of PDK
+set pdk_dir /home/cad/VLSI2Lab/Digital/library/
+set_attribute init_lib_search_path $pdk_dir
+
+## Set synthesizing effort for each synthesis stage
+set_attribute library "slow_vdd1v0_basicCells.lib"
+set_dont_use [get_lib_cells CLK*]
+set_dont_use [get_lib_cells SDFF*]
+set_dont_use [get_lib_cells DLY*]
+set_dont_use [get_lib_cells HOLD*]
+
+####################################################################
+### Load Design
+####################################################################
+read_hdl "${DESIGN}.v"
+elaborate $DESIGN
+puts "Runtime & Memory after 'read_hdl'"
+time_info Elaboration
+check_design -unresolved
+
+####################################################################
+### Constraints Setup
+####################################################################
+read_sdc alu.sdc
+report timing -encounter >> reports/${DESIGN}_pretim.rpt
+
+####################################################################################################
+### Synthesizing to Generic, Global Map, and Optimize (Low Effort)
+####################################################################################################
+set_attribute statistics_log_data true /
+set_attribute statistics_run_id "low_effort" /
+set_attribute statistics_run_description "run with low effort mapping" /
+
+set_attribute syn_generic_effort low
+set_attribute syn_map_effort low
+set_attribute syn_opt_effort low
+
+# Synthesize
+syn_generic
+puts "Runtime & Memory after 'syn_generic' (Low Effort)"
+time_info GENERIC
+statistics log -stage_id generic_low ;
+report datapath > reports/${DESIGN}_datapath_low.rpt
+generate_reports -outdir reports -tag low
+write_db -to_file ${DESIGN}_low.db
+report timing -encounter >> reports/${DESIGN}_low.rpt
+
+# Global Map
+syn_map
+statistics log -stage_id map_low ;
+report timing -encounter >> reports/${DESIGN}_low_global_map.rpt
+
+# Optimize
+syn_opt
+statistics log -stage_id opt_low ;
+report timing -encounter >> reports/${DESIGN}_low_opt.rpt
+
+statistics write -to_file ${DESIGN}_low_effort.stats_db ;
+write -mapped > alu_synth_low.v
+
+####################################################################################################
+### Now for Medium Effort (Same stages)
+####################################################################################################
+set_attribute statistics_run_id "medium_effort" /
+set_attribute statistics_run_description "run with medium effort mapping" /
+set_attribute syn_generic_effort medium
+set_attribute syn_map_effort medium
+set_attribute syn_opt_effort medium
+
+# Synthesize
+syn_generic
+puts "Runtime & Memory after 'syn_generic' (Medium Effort)"
+time_info GENERIC
+statistics log -stage_id generic_medium ;
+report datapath > reports/${DESIGN}_datapath_medium.rpt
+generate_reports -outdir reports -tag medium
+write_db -to_file ${DESIGN}_medium.db
+report timing -encounter >> reports/${DESIGN}_medium.rpt
+
+# Global Map
+syn_map
+statistics log -stage_id map_medium ;
+report timing -encounter >> reports/${DESIGN}_medium_global_map.rpt
+
+# Optimize
+syn_opt
+statistics log -stage_id opt_medium ;
+report timing -encounter >> reports/${DESIGN}_medium_opt.rpt
+
+statistics write -to_file ${DESIGN}_medium_effort.stats_db ;
+write -mapped > alu_synth_medium.v
+
+####################################################################################################
+### Now for High Effort (Same stages)
+####################################################################################################
+set_attribute statistics_run_id "high_effort" /
+set_attribute statistics_run_description "run with high effort mapping" /
+set_attribute syn_generic_effort high
+set_attribute syn_map_effort high
+set_attribute syn_opt_effort high
+
+# Synthesize
+syn_generic
+puts "Runtime & Memory after 'syn_generic' (High Effort)"
+time_info GENERIC
+statistics log -stage_id generic_high ;
+report datapath > reports/${DESIGN}_datapath_high.rpt
+generate_reports -outdir reports -tag high
+write_db -to_file ${DESIGN}_high.db
+report timing -encounter >> reports/${DESIGN}_high.rpt
+
+# Global Map
+syn_map
+statistics log -stage_id map_high ;
+report timing -encounter >> reports/${DESIGN}_high_global_map.rpt
+
+# Optimize
+syn_opt
+statistics log -stage_id opt_high ;
+report timing -encounter >> reports/${DESIGN}_high_opt.rpt
+
+statistics write -to_file ${DESIGN}_high_effort.stats_db ;
+write -mapped > alu_synth_high.v
+
+
+
+
+#compare Reports Generate
+statistics report -run_id low_effort -compare medium_effort -stage_id generic > reports/reports_compare/low_vs_medium_generic_report_DSi.rpt    
+statistics report -run_id low_effort -compare medium_effort -stage_id global_map > reports/reports_compare/low_vs_medium_globalmap_report_DSi.rpt
+statistics report -run_id low_effort -compare medium_effort -stage_id incremental  >reports/reports_compare/low_vs_medium_opt_report_DSi.rpt
+
+
+statistics report -run_id medium_effort -compare high_effort -stage_id generic >reports/reports_compare/medium_vs_high_generic_report_DSi.rpt
+statistics report -run_id medium_effort -compare high_effort -stage_id global_map > reports/reports_compare/medium_vs_high_globalmap_report_DSi.rpt
+statistics report -run_id medium_effort -compare high_effort -stage_id incremental  > reports/reports_compare/medium_vs_high_opt_report_DSi.rpt
+
+
+statistics report -run_id low_effort -compare high_effort -stage_id generic >reports/reports_compare/low_vs_high_generic_report_DSi.rpt
+statistics report -run_id low_effort -compare high_effort -stage_id global_map > reports/reports_compare/low_vs_high_globalmap_report_DSi.rpt
+statistics report -run_id low_effort -compare high_effort -stage_id incremental  > reports/reports_compare/low_vs_high_opt_report_DSi.rpt
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-------------------------SDC Code----------------------------------------
+# setting up time units
+
+set_units -time 1ns -capacitance pF
+
+# setting the clock period 10ns, as period = 1/freq, here, freq = 100MHz
+#set clock_period 10;
+#set clock_period 5; 
+set clock_period 1; 
+#set clock_period 10; 
+#set clock_period 10;  
+
+set top_module "alu"
+
+set clock_port {clk};
+
+set reset_port {rst_n};
+
+# setting the input ports in a list to a variable
+#set input_ports {a, b, cin} ; 
+set input_ports {A, B, cinI} ; 
+
+# setting the output ports in a list to a variable
+#set output_ports {sum, carry_out16} ; 
+set output_ports {S, carry_out16} ;
+
+# define the clocks
+create_clock -period ${clock_period} -waveform {0 6} -name func_clk 
+[get_ports ${clock_port}]
+
+# setting up constraints for the reset signal
+set_multicycle_path -setup 3 -from [get_ports ${reset_port}]
+set_multicycle_path -hold 2 -from [get_ports ${reset_port}]
+
+# Define input delays
+set_input_delay 0.4 -clock [get_clocks {func_clk}] ${input_ports}
+
+# Define output delays
+set_output_delay 0.6 -clock [get_clocks {func_clk}] ${output_ports}
+
