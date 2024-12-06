@@ -1,0 +1,358 @@
+$date
+   Fri Dec  6 19:41:40 2024
+$end
+
+$version
+  2024.1
+  $dumpfile ("cla_directed_tb.vcd") 
+$end
+
+$timescale
+  1ps
+$end
+
+$scope module cla_top_tb $end
+$var reg 16 ! a [15:0] $end
+$var reg 16 " b [15:0] $end
+$var reg 1 # cin $end
+$var reg 1 $ clk $end
+$var reg 16 % sum [15:0] $end
+$var reg 1 & carry_out16 $end
+$scope module dut $end
+$var wire 16 ' a [15:0] $end
+$var wire 16 ( b [15:0] $end
+$var wire 1 ) cin $end
+$var wire 1 * clk $end
+$var reg 16 % sum [15:0] $end
+$var wire 1 + carry_out16 $end
+$var wire 16 , g [15:0] $end
+$var wire 16 - p [15:0] $end
+$var wire 4 . cout1 [3:0] $end
+$var wire 4 / cout2 [3:0] $end
+$var wire 4 0 cout3 [3:0] $end
+$var wire 4 1 cout4 [3:0] $end
+$var wire 1 2 cout_mid1 $end
+$var wire 1 3 cout_mid2 $end
+$var wire 1 4 cout_mid3 $end
+$scope module gen_prop_inst $end
+$var wire 16 ' a [15:0] $end
+$var wire 16 ( b [15:0] $end
+$var wire 16 , g [15:0] $end
+$var wire 16 - p [15:0] $end
+$upscope $end
+$scope module carry_unit1 $end
+$var wire 4 5 g [3:0] $end
+$var wire 4 6 p [3:0] $end
+$var wire 1 ) cin $end
+$var wire 4 . cout [3:0] $end
+$upscope $end
+$scope module carry_unit2 $end
+$var wire 4 7 g [7:4] $end
+$var wire 4 8 p [7:4] $end
+$var wire 1 2 cin $end
+$var wire 4 / cout [3:0] $end
+$upscope $end
+$scope module carry_unit3 $end
+$var wire 4 9 g [11:8] $end
+$var wire 4 : p [11:8] $end
+$var wire 1 3 cin $end
+$var wire 4 0 cout [3:0] $end
+$upscope $end
+$scope module carry_unit4 $end
+$var wire 4 ; g [15:12] $end
+$var wire 4 < p [15:12] $end
+$var wire 1 4 cin $end
+$var wire 4 1 cout [3:0] $end
+$upscope $end
+$scope module sum_unit $end
+$var wire 16 - p [15:0] $end
+$var wire 1 ) cin $end
+$var wire 16 = cout [15:0] $end
+$var wire 1 * clk $end
+$var reg 16 % sum [15:0] $end
+$var wire 1 + carry_out16 $end
+$var integer 32 > i [31:0] $end
+$upscope $end
+$upscope $end
+$scope task check_output $end
+$var reg 17 ? expected_sum [16:0] $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+
+#0
+$dumpvars
+bx !
+bx "
+x#
+0$
+bx %
+x&
+bx '
+bx (
+x)
+0*
+x+
+bx ,
+bx -
+bx .
+bx /
+bx 0
+bx 1
+x2
+x3
+x4
+bx 5
+bx 6
+bx 7
+bx 8
+bx 9
+bx :
+bx ;
+bx <
+bx =
+bx >
+bx ?
+$end
+
+#5000
+1$
+1*
+b10000 >
+
+#10000
+b1010 !
+b1100 "
+0#
+0$
+0&
+b1010 '
+b1100 (
+0)
+0*
+0+
+b1000 ,
+b110 -
+b1000 .
+b0 /
+b0 0
+b0 1
+12
+03
+04
+b1000 5
+b110 6
+b0 7
+b0 8
+b0 9
+b0 :
+b0 ;
+b0 <
+b1000 =
+
+#15000
+1$
+b10110 %
+1*
+b10000 >
+
+#20000
+b111110100 !
+b1001011000 "
+0$
+b111110100 '
+b1001011000 (
+0*
+b1010000 ,
+b1110101100 -
+b0 .
+b1111 /
+b11 0
+02
+13
+b0 5
+b1100 6
+b101 7
+b1010 8
+b0 9
+b11 :
+b0 ;
+b0 <
+b1111110000 =
+b10110 ?
+
+#25000
+1$
+b10001001100 %
+1*
+b10000 >
+
+#30000
+b111011100100100 !
+b101000000010011 "
+1#
+0$
+b111011100100100 '
+b101000000010011 (
+1)
+0*
+b101000000000000 ,
+b10011100110111 -
+b111 .
+b0 /
+b0 0
+b111 1
+03
+b0 5
+b111 6
+b0 7
+b11 8
+b0 9
+b111 :
+b101 ;
+b10 <
+b111000000000111 =
+b10001001100 ?
+
+#35000
+1$
+b1100011100111000 %
+1*
+b10000 >
+
+#40000
+b1111110111101000 !
+b1010 "
+0$
+0&
+b1111110111101000 '
+b1010 (
+0*
+0+
+b1000 ,
+b1111110111100010 -
+b1000 .
+b0 1
+12
+b1000 5
+b10 6
+b0 7
+b1110 8
+b0 9
+b1101 :
+b0 ;
+b1111 <
+b1000 =
+b1100011100111000 ?
+
+#45000
+1$
+b1111110111110011 %
+1*
+b10000 >
+
+#50000
+b0 !
+b0 "
+0$
+b0 '
+b0 (
+0*
+b0 ,
+b0 -
+b0 .
+02
+b0 5
+b0 6
+b0 7
+b0 8
+b0 9
+b0 :
+b0 ;
+b0 <
+b0 =
+b1111110111110011 ?
+
+#55000
+1$
+b1 %
+1*
+b10000 >
+
+#60000
+b1111111001100000 !
+b101110111000 "
+0$
+1&
+b1111111001100000 '
+b101110111000 (
+0*
+1+
+b101000100000 ,
+b1111010111011000 -
+b1110 /
+b1111 0
+b1111 1
+13
+14
+b0 5
+b1000 6
+b10 7
+b1101 8
+b1010 9
+b101 :
+b0 ;
+b1111 <
+b1111111111100000 =
+b1 ?
+
+#65000
+1$
+b101000011001 %
+1*
+b10000 >
+
+#70000
+b1111111111111111 !
+b0 "
+0$
+1&
+b1111111111111111 '
+b0 (
+0*
+1+
+b0 ,
+b1111111111111111 -
+b1111 .
+b1111 /
+b1111 0
+b1111 1
+12
+13
+14
+b0 5
+b1111 6
+b0 7
+b1111 8
+b0 9
+b1111 :
+b0 ;
+b1111 <
+b1111111111111111 =
+b10000101000011001 ?
+
+#75000
+1$
+b0 %
+1*
+b10000 >
+
+#80000
+0$
+0*
+b10000000000000000 ?
+
+#85000
+1$
+1*
+b10000 >

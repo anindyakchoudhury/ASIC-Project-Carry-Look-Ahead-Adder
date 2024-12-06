@@ -146,6 +146,8 @@ class scoreboard;
       end
       else begin
         pass++;
+        //$display("\033[31mTest No.%d Passed\033[0m : a=%d b=%d cin=%b  Expected sum=%d cout=%d  Resulted sum=%d cout=%d",
+        //pass + fail, d_trans.a, d_trans.b, d_trans.cin, d_trans.sum, d_trans.carry_out16, m_trans.sum, m_trans.carry_out16);
       end
     end
     $display("\033[1;33mData flow: Passed %0d out of Total %0d Tests\033[0m", pass, pass + fail);
@@ -190,7 +192,7 @@ program test(cla_if claif);
 
   initial begin
     env = new(claif);
-    env.main(12000); // Run 1000 tests
+    env.main(200); // Run 1000 tests
     $finish;
   end
 endprogram

@@ -31,44 +31,54 @@ module cla_top_tb;
 
         // Test Case 1: a = 10, b = 12, cin = 0
         @(negedge clk);  //$display("Time is %t", $time);
-        a = 8'b00001010; // 10
-        b = 8'b00001100; // 12
+        a = 16'b00001010; // 10
+        b = 16'b00001100; // 12
         cin = 0;
         #10; // Wait for one clock cycle
         check_output(a+b+cin); // Expected sum = 10 + 12 = 22
 
-        // Test Case 2: a = 15, b = 1, cin = 0
         @(negedge clk);  //$display("Time is %t", $time);
-        a = 8'b00001111; // 15
-        b = 8'b00000001; // 1
+        a = 500;
+        b = 600;
         cin = 0;
-        #10;
-        check_output(a+b+cin); // Expected sum = 15 + 1 = 16
+        #10; // Wait for one clock cycle
+        check_output(a+b+cin);
 
-        // Test Case 3: a = 255, b = 1, cin = 0
-        @(negedge clk);
-        a = 8'b11111111; // 255
-        b = 8'b00000001; // 1
-        cin = 0;
-        #10;
-        check_output(a+b+cin); // Expected sum = 255 + 1 = 256 (wraps to 0)
-
-        // Test Case 4: a = 100, b = 55, cin = 1
-        @(negedge clk);
-        a = 8'b01100100; // 100
-        b = 8'b00110111; // 55
+        @(negedge clk);  //$display("Time is %t", $time);
+        a = 30500;
+        b = 20499;
         cin = 1;
-        #10;
-        check_output(a+b+cin); // Expected sum = 100 + 55 + 1 = 156
+        #10; // Wait for one clock cycle
+        check_output(a+b+cin);
 
-        // Test Case 5: a = 200, b = 100, cin = 1
-        @(negedge clk);
-        a = 60300; // 200
-        b = 8'b01100100; // 100
+        @(negedge clk);  //$display("Time is %t", $time);
+        a = 65000;
+        b = 10;
         cin = 1;
-        #10;
-        check_output(a+b+cin); // Expected sum = 200 + 100 + 1 = 301 (wraps to 45)
-        // Finish the simulation after all test cases
+        #10; // Wait for one clock cycle
+        check_output(a+b+cin);
+
+        @(negedge clk);  //$display("Time is %t", $time);
+        a = 0;
+        b = 0;
+        cin = 1;
+        #10; // Wait for one clock cycle
+        check_output(a+b+cin);
+
+        @(negedge clk);  //$display("Time is %t", $time);
+        a = 65120;
+        b = 3000;
+        cin = 1;
+        #10; // Wait for one clock cycle
+        check_output(a+b+cin);
+
+        @(negedge clk);  //$display("Time is %t", $time);
+        a = 65535;
+        b = 0;
+        cin = 1;
+        #10; // Wait for one clock cycle
+        check_output(a+b+cin);
+
         #10;
         $finish;
     end
@@ -88,8 +98,10 @@ module cla_top_tb;
         end
     endtask
 
+      // VCD dump
+    initial begin
+    $dumpfile("cla_directed_tb.vcd");
+    $dumpvars;
+    end
+
 endmodule
-
-
-
-
