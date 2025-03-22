@@ -13,8 +13,8 @@ Department of Electrical and Electronic Engineering
 - **Group**: 03
 
 ## Instructors
-- Nafis Sadik, Lecturer
-- Rafid Hassan Palash, Part-Time Lecturer
+- Nafis Sadik, Lecturer, EEE, BUET
+- Rafid Hassan Palash, Part-Time Lecturer, EEE, BUET
 
 ## Team Members and Contributions
 
